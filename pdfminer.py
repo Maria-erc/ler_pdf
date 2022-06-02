@@ -22,13 +22,13 @@ df_colunas = [
 ]
 
 # dataframe de contrato padrão 1
-df_contrato_p1 = pd.DataFrame(columns=df_colunas)
+df_doc_padrao1 = pd.DataFrame(columns=df_colunas)
 
 # dataframe de contrato de padrão 2
-df_contrato_p2 = pd.DataFrame(columns=df_colunas)
+df_doc_padrao2 = pd.DataFrame(columns=df_colunas)
 
 # dataframe de contrato de nem padrão 1 nem de padrão 2
-df_contrato_exc = pd.DataFrame(columns=df_colunas)
+df_doc_exc = pd.DataFrame(columns=df_colunas)
 
 # dicionario erro
 df_erro = pd.DataFrame(columns=df_colunas)
@@ -215,7 +215,7 @@ for arquivo in arquivos:
     else:
             # concatena os dataframes 
             #https://pythonexamples.org/pandas-concatenate-dataframes/?msclkid=4110b667af5c11ecbec6a915e00be673
-            df_completo = pd.concat([df_contrato_p1, df_contrato_p2,df_contrato_exc, df_erro], ignore_index=True)
+            df_completo = pd.concat([df_doc_padrao1, df_doc_padrao2,df_contrato_exc, df_erro], ignore_index=True)
     
 # exporta para planilha em excel
 df_completo.to_excel(r'C:pasta.xlsx', index=False)
