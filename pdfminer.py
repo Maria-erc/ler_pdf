@@ -49,12 +49,12 @@ contador = 0
 
 
 for arquivo in arquivos:
-    contrato = diretorio + arquivo
-    def le_contrato(contrato):
+    doc_pdf = diretorio + arquivo
+    def le_contrato(documento_pdf):
         '''Lê contrato em pdf'''
         global output_string
         output_string = StringIO()
-        with open(contrato, 'rb') as in_file:
+        with open(doc_pdf, 'rb') as in_file:
             parser = PDFParser(in_file)
             doc = PDFDocument(parser)
             rsrcmgr = PDFResourceManager()
@@ -63,21 +63,21 @@ for arquivo in arquivos:
             for page in PDFPage.create_pages(doc):
                 interpreter.process_page(page)
 
-    le_contrato(contrato)
+    le_contrato(doc_pdf)
     contador += 1
     print('=-=-', contador)
     # armazena o texto
     texto = output_string.getvalue()
     try:
          # criação de dicionário
-        dicionario_dados_contrato_excecao = {
+        dicionario_dados_pdf_excecao = {
             'Arquivo' : [],
             'Nome' : [],
-            'CPF/CNPJ' : [],
-            'Torre_Apart_Cota' : [],
+            'palavrachave1' : [],
+            'conjuntopalavrachave2' : [],
         }
 
-        if 'Check List de Cadastro' in texto:
+        if 'Titulo do pdf' in texto:
             texto_lista = texto.split('\n')
 
             # extrair nome
@@ -88,39 +88,38 @@ for arquivo in arquivos:
                     nome = nome[0]
                     break
 
-            # extrair cpf
+            # extrair palavrachave1
             for elemento in texto_lista:
-                if 'CPF: ' in elemento:
-                    cpf = elemento[5::]
+                if 'palavrachave1: ' in elemento:
+                    palavrachave1 = elemento[5::]
                     break
 
-            # extrair torre
+            # extrair palavrachave2.1
             for elemento in texto_lista:
-                if 'Torre: ' in elemento:
-                    torre = elemento[7::]
+                if 'palavrachave2.1: ' in elemento:
+                    palavrachave2_1 = elemento[7::]
                     break
 
-            #extrair apartamento
+            #extrair palavrachave2.2
             for elemento in texto_lista:
-                # extrai APARTAMENTO
-                if 'Apartamento: ' in elemento:
-                    apt = elemento[13::]
+                if 'palavrachave2.2: ' in elemento:
+                    palavrachave2_2 = elemento[13::]
                     break
 
-            # extrair cota
+            # extrair palavrachave2.3
             for elemento in texto_lista:
-                if 'Cota: ' in elemento:
-                    cota = elemento[16::]
+                if 'palavrachave2.3: ' in elemento:
+                    palavrachave2_3 = elemento[16::]
                     break
 
-            tor_cot_apt = torre + '-' + apt + '-' + cota
+            conjuntopalavrachave2 = palavrachave2_1 + '-' + palavrachave2_2 + '-' + palavrachave2_3
 
 
-            dicionario_dados_contrato_excecao['Nome'] = nome
-            dicionario_dados_contrato_excecao['CPF/CNPJ'] = cpf
-            dicionario_dados_contrato_excecao['Torre_Apart_Cota'] = tor_cot_apt
+            dicionario_dados_pdf_excecao['Nome'] = nome
+            dicionario_dados_pdf_excecao['palavrachave1'] = palavrachave1
+            dicionario_dados_pdf_excecao['conjuntopalavrachave2'] = conjuntopalavrachave2
 
-        elif 'PROPOSTA' and 'COMPRA'and 'VENDA' in texto:
+        elif 'palavraA' and 'palavraB'and 'palavraC' in texto:
             texto_lista = texto.split('\n')
 
             # extrair nome
@@ -132,65 +131,61 @@ for arquivo in arquivos:
                     print(nome)
                     break
 
-            # extrair cpf
+            # extrair palavrachave1
             for elemento in texto_lista:
-                if 'CPF:' in elemento:
-                    cpf = elemento[5:19]
+                if 'palavrachave1:' in elemento:
+                    palavrachave1 = elemento[5:19]
                     break
                 else:
-                    cpf = ''
+                    palavrachave1 = ''
 
-            # extrair torre
+            # extrair palavrachave2.1
             for elemento in texto_lista:
-                if 'Torre:' in elemento:
-                    #torre_index = texto_lista.index(elemento)
-                    #torre = texto_lista[torre_index+1]
-                    torre = elemento[6::]
-                    print('torre:', torre)
+                if 'palavrachave2.1:' in elemento:
+                    palavrachave2_1 = elemento[6::]
+                    print('palavrachave2.1:', palavrachave2_1)
                     break
                 else:
-                    torre = ''
+                    palavrachave2_1 = ''
 
-            # extrair apartamento
+            # extrair palavrachave2.3
             for elemento in texto_lista:
-                if 'Apartamento:' in elemento:
-                    apt_index = texto_lista.index(elemento)
-                    apt  = texto_lista[apt_index+1]
-                    print('aprt:', apt)
+                if 'palavrachave2.3:' in elemento:
+                    palavrachave2_3_index = texto_lista.index(elemento)
+                    palavrachave2_3  = texto_lista[palavrachave2_3_index+1]
+                    print('palavrachave2.3:', palavrachave2_3)
                     break
                 else:
-                    apt = ''
+                    palavrachave2_3 = ''
 
 
             for elemento in texto_lista:
-                if 'Cota n' in elemento:
+                if 'palavrachave2.2' in elemento:
                     if ':' in elemento:
                         if '.' in elemento:
-                    #cota_index = texto_lista.index(elemento)
-                    #cota = texto_lista[cota_index]
-                            cota = elemento
-                            print('cota', cota)
+                            palavrachave2_2 = elemento
+                            print('palavrachave2.2', palavrachave2_2)
                             break
                 else:
-                    cota = ''
-            tor_cot_apt = torre + '-' + apt + '-' + cota
+                    palavrachave2_2 = ''
+            conjuntopalavrachave2 = palavrachave2_1 + '-' + palavrachave2_3 + '-' + palavrachave2_2
 
 
-            dicionario_dados_contrato_excecao['Nome'] = nome
-            dicionario_dados_contrato_excecao['CPF/CNPJ'] = cpf
-            dicionario_dados_contrato_excecao['Torre_Apart_Cota'] = tor_cot_apt
+            dicionario_dados_pdf_excecao['Nome'] = nome
+            dicionario_dados_pdf_excecao['palavrachave1'] = palavrachave1
+            dicionario_dados_pdf_excecao['conjuntopalavrachave2'] = conjuntopalavrachave2
                             
         
-        # se não achar nome nem cpf/cnpj
+        # se não achar nome nem palavrachave1
         else: 
-            dicionario_dados_contrato_excecao['Nome'] = 'ne'
-            dicionario_dados_contrato_excecao['CPF/CNPJ'] = 'ne'
-            dicionario_dados_contrato_excecao['Torre_Apart_Cota'] = 'ne'
+            dicionario_dados_pdf_excecao['Nome'] = 'ne'
+            dicionario_dados_pdf_excecao['palavrachave1'] = 'ne'
+            dicionario_dados_pdf_excecao['conjuntopalavrachave2'] = 'ne'
 
         # coloca informações extraídas do texto no dicionário
-        dicionario_dados_contrato_excecao['Arquivo'] = arquivo
+        dicionario_dados_pdf_excecao['Arquivo'] = arquivo
 
-        df_dict_exc = pd.DataFrame([dicionario_dados_contrato_excecao])
+        df_dict_exc = pd.DataFrame([dicionario_dados_pdf_excecao])
 
         df_contrato_exc = pd.concat([df_contrato_exc,df_dict_exc], ignore_index=True)
 
@@ -203,14 +198,14 @@ for arquivo in arquivos:
         dicionario_erro = {
             'Arquivo' : [],
             'Nome' : [],
-            'CPF/CNPJ' : [],
-            'Torre_Apart_Cota' : [],
+            'palavrachave1' : [],
+            'conjuntopalavrachave2' : [],
         }
 
         dicionario_erro['Arquivo'] = arquivo
         dicionario_erro['Nome'] = 'e'
-        dicionario_erro['CPF/CNPJ'] = 'e'
-        dicionario_erro['Torre_Apart_Cota'] = 'e'
+        dicionario_erro['palavrachave1'] = 'e'
+        dicionario_erro['conjuntopalavrachave2'] = 'e'
 
         df_dict_erro = pd.DataFrame([dicionario_erro])
 
@@ -223,11 +218,11 @@ for arquivo in arquivos:
             df_completo = pd.concat([df_contrato_p1, df_contrato_p2,df_contrato_exc, df_erro], ignore_index=True)
     
 # exporta para planilha em excel
-df_completo.to_excel(r'C:\Users\maria.costa\Desktop\maria\resumo_contratos3.xlsx', index=False)
+df_completo.to_excel(r'C:pasta.xlsx', index=False)
 
 print('Dataframe transferido para Excel.')
 
 print('-----------------------')
-print('Tabela resumo de contratos:')
+print('Tabela resumo de documentos:')
 print('\ndf_completo:')
 print(df_completo)
