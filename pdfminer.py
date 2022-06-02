@@ -17,8 +17,8 @@ import os
 df_colunas = [
     'Arquivo',
     'Nome',
-    'CPF/CNPJ',
-    'Torre_Apart_Cota'
+    'palavrachave1',
+    'conjuntopalavrachave2'
 ]
 
 # dataframe de contrato padrão 1
